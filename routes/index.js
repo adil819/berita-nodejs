@@ -195,7 +195,7 @@ router.post('/komen', function (req, res, next) {
   }
   Komentar.create(komentar).
     then(data => {
-      res.redirect('/beritadetail?id=4');
+      res.redirect('/beritadetail?id='+req.body.id_berita);
     })
     .catch(err => {
       res.render('berita', {
