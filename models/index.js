@@ -17,4 +17,5 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.beritas = require('./berita')(sequelize, Sequelize);
+db.komentars = require('./komentar')(sequelize, Sequelize);
 module.exports = db;

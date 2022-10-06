@@ -3,6 +3,7 @@ var router = express.Router();
 
 const db = require('../models');
 const Berita = db.beritas;
+const Komentar = db.komentars;
 const Op = db.Sequelize.Op;
 
 // tambahan upload image
@@ -11,6 +12,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 // tambahan show image
 const Express = require('express');
+const komentar = require('../models/komentar');
 const app = new Express();
 app.use(Express.static(__dirname+'/public'));
 
@@ -36,29 +38,76 @@ router.get('/berita', function(req, res, next) {
 
 });
 router.get('/beritadetail', function (req, res, next) {
+
   var id = parseInt(req.query.id);
+  
   Berita.findByPk(id)
     .then(detailberita => {
-      if (detailberita) {
-        res.render('beritadetail', {
-          title: 'Detail Berita',
-          berita: detailberita
-        });
-      } else {
+      if (!detailberita) {
         //http 404 not found
         res.render('beritadetail', {
-          title: 'Detail Berita',
+          title: 'Detail Beritaa',
           berita: {}
         });
-      }
+      } 
+      
+      // res.render('beritadetail', {
+      //   title: 'Detail Berita',
+      //   berita: detailberita
+      // });
+
+      Komentar.findAll({ where: { id_berita: id } })
+      .then(komentar => {
+        res.render('beritadetail', {
+          title: 'Detail Berita',
+          berita: detailberita,
+          komentar: komentar
+        });
+      })
+      .catch(err => {
+        res.render('komentar', {
+          title: 'Daftar komentar',
+          komentar: {}
+        });
+      });
+
     })
     .catch(err => {
       res.render('beritadetail', {
-        title: 'Detail Berita',
+        title: 'Detail Berit',
         berita: {}
       });
     });
 });
+
+// router.get('/beritadetail', function (req, res, next) {
+
+//   var id = parseInt(req.query.id);
+  
+//   Berita.findByPk(id)
+//     .then(detailberita => {
+//       if (detailberita) {
+//         res.render('beritadetail', {
+//           title: 'Detail Berita',
+//           berita: detailberita
+//         });
+//       } else {
+//         //http 404 not found
+//         res.render('beritadetail', {
+//           title: 'Detail Berita',
+//           berita: {}
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       res.render('beritadetail', {
+//         title: 'Detail Berita',
+//         berita: {}
+//       });
+//     });
+// });
+
+
 router.get('/detail/:id', function (req, res, next) {
   var id = parseInt(req.params.id);
   // query ke database
@@ -136,6 +185,23 @@ router.post('/addberita', function (req, res) {
 //       });
 //     });
 // });
+
+
+router.post('/komen', function (req, res, next) {
+  var komentar = {
+    id_berita: req.body.id_berita,
+    komentar:req.body.komentar
+  }
+  Komentar.create(komentar).
+    then(data => {
+      res.redirect('/beritadetail?id=4');
+    })
+    .catch(err => {
+      res.render('berita', {
+        title: 'Salah Berita',
+      });
+    });
+});
 
 router.get('/deleteberita/:id', function (req, res, next) {
   var id = parseInt(req.params.id);
