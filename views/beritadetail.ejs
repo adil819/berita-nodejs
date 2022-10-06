@@ -1,0 +1,21 @@
+<%- include('templates/header')-%>
+
+    <h1>Detail Berita</h1>
+    <br>
+    
+            <p class="card-text">gambar: <%=berita.gambar%></p>       
+            <%=berita.nama%>
+            <h6 class="card-subtitle mb-2 text-muted">berita Id: <%=berita.id%>
+            </h6>
+            <p class="card-text">isi: <%=berita.isi%></p>
+           
+
+            <br>
+            <br>
+            <div>
+                <a href="/berita" class="btn btn-primary">Kembali</a>
+                
+            </div>
+
+
+            <%- include('templates/footer')-%>
