@@ -5,10 +5,14 @@ const db = require('../models');
 const Berita = db.beritas;
 const Op = db.Sequelize.Op;
 
-// tambahan
+// tambahan upload image
 var http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
+// tambahan show image
+const Express = require('express');
+const app = new Express();
+app.use(Express.static(__dirname+'/public'));
 
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -91,7 +95,7 @@ router.post('/addberita', function (req, res) {
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
     var oldpath = files.filetoupload.filepath;
-    var newpath = 'C:/Users/ahmad/Documents/Proyekmandiri1-main/pm2/images/' + files.filetoupload.originalFilename;
+    var newpath = 'C:/Users/ahmad/Documents/Proyekmandiri1-main/pm2/public/images/' + files.filetoupload.originalFilename;
     var berita = {
       nama: fields.nama,
       isi:fields.isi,
