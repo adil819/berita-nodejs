@@ -8,6 +8,9 @@ module.exports = (sequelize, Sequelize) => {
         },
         gambar: {
             type: Sequelize.STRING
+        },
+        deleted: {
+            type: Sequelize.INTEGER
         }
 });
     return Berita;

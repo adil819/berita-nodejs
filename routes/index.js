@@ -22,7 +22,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/berita', function(req, res, next) {  
 
-  Berita.findAll()
+  Berita.findAll({ where: { deleted: 0} })
     .then(berita => {
       res.render('berita', {
         title: 'Daftar berita',
@@ -148,7 +148,8 @@ router.post('/addberita', function (req, res) {
     var berita = {
       nama: fields.nama,
       isi:fields.isi,
-      gambar:files.filetoupload.originalFilename
+      gambar:files.filetoupload.originalFilename,
+      deleted:0
     }
     fs.rename(oldpath, newpath, function (err) {
       if (err) throw err;
@@ -205,7 +206,7 @@ router.post('/komen', function (req, res, next) {
 
 router.get('/deleteberita/:id', function (req, res, next) {
   var id = parseInt(req.params.id);
-  Berita.destroy({
+  Berita.update({deleted:1}, {
     where: { id: id }
   })
     .then(num => {
@@ -218,6 +219,23 @@ router.get('/deleteberita/:id', function (req, res, next) {
       });
     });
 });
+
+// router.get('/deleteberita/:id', function (req, res, next) {
+//   var id = parseInt(req.params.id);
+//   Berita.destroy({
+//     where: { id: id }
+//   })
+//     .then(num => {
+//       res.redirect('/berita');
+//     })
+//     .catch(err => {
+//       res.json({
+//         info: "Eror",
+//         message: err.message
+//       });
+//     });
+// });
+
 router.get('/editberita/:id', function (req, res, next) {
   var id = parseInt(req.params.id);
   Berita.findByPk(id)
